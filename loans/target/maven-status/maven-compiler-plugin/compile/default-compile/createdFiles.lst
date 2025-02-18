@@ -1,0 +1,17 @@
+com\msa\loans\dto\ResponseDto.class
+com\msa\loans\exception\ResourceNotFoundException.class
+com\msa\loans\LoansApplication.class
+com\msa\loans\dto\LoansContactInfoDto.class
+com\msa\loans\exception\LoanAlreadyExistsException.class
+com\msa\loans\constants\LoansConstants.class
+com\msa\loans\dto\ErrorResponseDto.class
+com\msa\loans\service\impl\LoansServiceImpl.class
+com\msa\loans\repository\LoansRepository.class
+com\msa\loans\entity\BaseEntity.class
+com\msa\loans\controller\LoansController.class
+com\msa\loans\service\ILoansService.class
+com\msa\loans\audit\AuditAwareImpl.class
+com\msa\loans\mapper\LoansMapper.class
+com\msa\loans\dto\LoansDto.class
+com\msa\loans\entity\Loans.class
+com\msa\loans\exception\GlobalExceptionHandler.class

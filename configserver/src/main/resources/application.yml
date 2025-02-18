@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: "configserver"
+  profiles:
+    active: git
+    # native for class and folder approach for storage
+  cloud:
+    config:
+      server:
+        git:
+          uri: "https://github.com/bess-cater/msa-config.git"
+          default-label: main
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+        # native: 
+        #   search-locations: "classpath:/config"
+  # rabbitmq:
+  #   host: "localhost"
+  #   port: 5672
+  #   username: "guest"
+  #   password: "guest"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readinessState:
+      enabled: true
+    livenessState:
+      enabled: true 
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+encrypt:
+  key: "guyf4erwuy67FUaf0yetiQWRi"       
+           
+
+server:
+  port: 8071
+# spring:
+#   datasource:
+#     url: jdbc:h2:mem:testdb
+#     driverClassName: org.h2.Driver
+#     username: liza
+#     password: vocal50tu!
+#   h2:
+#     console:
+#       enabled: true
+#   jpa:
+#     database-platform: org.hibernate.dialect.H2Dialect
+#     hibernate:
+#       ddl-auto: update
+#     show-sql: true
+#   config:
+#    import:
+#     - "application_qa.yml"
+#     - "application_prod.yml"
+#   profiles:
+#    active:
+#     - "qa"  
+
+# build:
+#   version: "3.0"
+
+# accounts:
+#   message: "Lolka ti zatrallena na raz heheh"
+#   contactDetails:
+#     name: "Liza - Developer"
+#     location: "Seoul"
+#   skills:
+#     - python
+#     - java
+
+  

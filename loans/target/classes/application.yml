@@ -1,0 +1,58 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: "loans"
+  profiles:
+    active: "prod"
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+eureka:
+  instance:
+    preferIpAddress: true #rather then DNS
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+  
+  # renewalPercentThreshold: 0.85
+
+
+
+info:
+  app:
+    name: "loans"
+    description: "Application for loans"
+    version: "7"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+  info:
+    env:
+      enabled: true
+
+logging:
+  level:
+    com:
+      msa:
+        loans: DEBUG
