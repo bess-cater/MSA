@@ -3,6 +3,8 @@ package com.msa.accounts.service.implementation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.msa.accounts.DTO.AccountsDTO;
 import com.msa.accounts.DTO.CardsDto;
@@ -27,6 +29,7 @@ public class CustomerServiceImpl implements ICustomerService {
     private CustomerRepo customerRepository;
     private CardsFeignService cardsFeignClient;
     private LoansFeignService loansFeignClient;
+    private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     /**
      * @param mobileNumber - Input Mobile Number
@@ -34,6 +37,7 @@ public class CustomerServiceImpl implements ICustomerService {
      */
     @Override
     public CustomerDetailsDTO fetchCustomerDetails(String mobileNumber, String correlationID) {
+        logger.debug("Before Feign call - mobileNumber: {}", mobileNumber);
         Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
                 () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
         );
@@ -44,11 +48,14 @@ public class CustomerServiceImpl implements ICustomerService {
         CustomerDetailsDTO customerDetailsDto = CustomerMapper.mapToCustomerDetailsDto(customer, new CustomerDetailsDTO());
         customerDetailsDto.setAccountsDto(AccMapper.mapToAccountsDto(accounts, new AccountsDTO()));
 
-        ResponseEntity<LoansDto> loansDtoResponseEntity = loansFeignClient.fetchLoanDetails(correlationID, mobileNumber);
-        customerDetailsDto.setLoansDto(loansDtoResponseEntity.getBody());
+        ResponseEntity<LoansDto> loansDtoResponseEntity = loansFeignClient.fetchLoanDetails(mobileNumber, correlationID);
+        if(null!= loansDtoResponseEntity){customerDetailsDto.setLoansDto(loansDtoResponseEntity.getBody());}
+        
+        // logger.debug("After Feign call - Response: {}", loansDtoResponseEntity.getBody());
 
-        ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(correlationID, mobileNumber);
-        customerDetailsDto.setCardsDto(cardsDtoResponseEntity.getBody());
+        ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(mobileNumber, correlationID);
+        if(null!=cardsDtoResponseEntity){customerDetailsDto.setCardsDto(cardsDtoResponseEntity.getBody());}
+        
 
         return customerDetailsDto;
 

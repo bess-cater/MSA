@@ -61,7 +61,7 @@ public class CustomerController {
     @GetMapping("/fetchCustomerDetails")
     public ResponseEntity<CustomerDetailsDTO> fetchCustomerDetails(@RequestHeader("msa-correlation-id") String correlationID,
                                                                    @RequestParam("mobileNumber")
-                                                                   @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+                                                                   
                                                                    String mobileNumber){
         logger.debug("ID~~", correlationID);
         CustomerDetailsDTO customerDetailsDto = iCustomersService.fetchCustomerDetails(mobileNumber, correlationID);

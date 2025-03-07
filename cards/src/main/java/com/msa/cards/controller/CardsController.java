@@ -103,7 +103,6 @@ public class CardsController {
     })
     @GetMapping("/fetch")
     public ResponseEntity<CardsDto> fetchCardDetails(@RequestHeader("msa-correlation-id") String correlationID, @RequestParam
-                                                               @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                                String mobileNumber) {
         logger.debug("ID~~", correlationID);                                                        
         CardsDto cardsDto = iCardsService.fetchCard(mobileNumber);
