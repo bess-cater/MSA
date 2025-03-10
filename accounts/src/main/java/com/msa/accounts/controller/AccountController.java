@@ -8,6 +8,8 @@ import com.msa.accounts.DTO.ResponseDTO;
 import com.msa.accounts.constants.accConstants;
 import com.msa.accounts.service.IAccountService;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -110,15 +112,28 @@ public ResponseEntity<ResponseDTO> createAcc(@Valid @RequestBody CustomerDTO cus
     }
 
 
+    @Retry(name="getBuildInfo", fallbackMethod = "getBuildInfoFallBack")
     @GetMapping("/build-info")
     public ResponseEntity<String> getVersion(){
         return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
     }
 
+    // Executed after retries
+
+    public ResponseEntity<String> getBuildInfoFallBack(Throwable throwable){
+        return ResponseEntity.status(HttpStatus.OK).body("0.9");
+    }
+
+    @RateLimiter(name="getJavaVersion", fallbackMethod = "getJavaVersionFallback")
     @GetMapping("/java-info")
     public ResponseEntity<String> getJavaVersion(){
         return ResponseEntity.status(HttpStatus.OK)
         .body(environment.getProperty("MAVEN_HOME"));
+    }
+
+    public ResponseEntity<String> getJavaVersionFallback(Throwable throwable){
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Java 17");
     }
 
     @GetMapping("/contacts")
